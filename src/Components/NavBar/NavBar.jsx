@@ -1,10 +1,20 @@
-import {React} from "react";
-import { NavLink } from "react-router";
-
+import { React, use } from "react";
+import { Link, NavLink } from "react-router";
+import { Context } from "../../Context/Context";
 
 const NavBar = () => {
+  const { user, handleSignOut } = use(Context);
 
-
+  // LogOut section
+  const handleLogOut = () => {
+    handleSignOut()
+      .then(() => {
+        console.log("sign out successful");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -34,6 +44,14 @@ const NavBar = () => {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/login">Log in</NavLink>
             <NavLink to="/signup">Sign Up</NavLink>
+            <NavLink to="/dasbord">Dasbord</NavLink>
+            {user && (
+              <>
+                <NavLink to="/about">About</NavLink>
+
+                <NavLink to="/blog">Blog</NavLink>
+              </>
+            )}
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">daisyUI</a>
@@ -43,10 +61,26 @@ const NavBar = () => {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/login">Log in</NavLink>
           <NavLink to="/signup">Sign Up</NavLink>
+          <NavLink to="/dasbord">Dasbord</NavLink>
+          {user && (
+            <>
+              <NavLink to="/about">About</NavLink>
+
+              <NavLink to="/blog">Blog</NavLink>
+            </>
+          )}
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {user ? (
+          <a onClick={handleLogOut} className="btn">
+            Log Out
+          </a>
+        ) : (
+          <Link className="btn" to="/login">
+            Log in
+          </Link>
+        )}
       </div>
     </div>
   );
